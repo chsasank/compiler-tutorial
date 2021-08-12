@@ -1,6 +1,7 @@
 from enum import Enum
 from collections import namedtuple
 
+
 class TokenKind(Enum):
     tok_eof = -1
 
@@ -12,7 +13,8 @@ class TokenKind(Enum):
     tok_identifier = -4
     tok_number = -5
 
-Token = namedtuple('Token', 'kind value')
+
+Token = namedtuple("Token", "kind value")
 
 
 class Lexer:
@@ -53,17 +55,18 @@ class Lexer:
                 while last_char.isdigit() or last_char == ".":
                     num_str += last_char
                     last_char = self.get_char()
-                
+
                 num_val = float(num_str)
                 yield Token(kind=TokenKind.tok_number, value=num_val)
 
-            if last_char == '#':
+            if last_char == "#":
                 # comment until end of line
                 last_char = self.get_char()
-                while (last_char != '\n' and last_char != '\r'):
+                while last_char != "\n" and last_char != "\r":
                     last_char = self.get_char()
-            
-            if last_char == '\0':
+
+            if last_char == "\0":
+                # end of file
                 yield Token(kind=TokenKind.tok_eof, value=None)
                 break
 
@@ -72,7 +75,8 @@ class Lexer:
             return next(self.iterator)
         except StopIteration:
             # EOF character
-            return '\0'
+            return "\0"
+
 
 if __name__ == "__main__":
     for tok in Lexer("def hello").get_tok():
